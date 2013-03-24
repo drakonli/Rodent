@@ -255,9 +255,10 @@ html[xmlns] .slides { display: block; }
     {height:47px; width:190px;  margin:0 auto; background:#156797; position:relative;
 		top:20px;}
 		
-#footer-social-facebook
-    { height:46px; width:46px; float:left; background:url(/resources/img/social-icons-sprite-46x46.png);  background-position: 0px 0px;}
-		
+#footer-social-facebook {
+     height:46px; width:46px; float:left; background:url(/resources/img/social-icons-sprite-46x46.png);  background-position: 0px 0px;
+}
+
 #footer-social-facebook:hover {
   background-position: 0px -46px;
 }

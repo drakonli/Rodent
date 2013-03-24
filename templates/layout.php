@@ -13,7 +13,7 @@
 	<div id='submain'>
 		<div id='header'>
 			<a href='file:///D:/programmirovanie/polls_for_all/index.html'>
-				<div id='logo'>				
+				<div id='logo'>	dsdsds			
 					<div id='logo-img'>
 						<a href='file:///D:/programmirovanie/polls_for_all/index.html'>
 							<img src='resources/img/logo-img.png'>
