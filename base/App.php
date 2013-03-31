@@ -33,28 +33,29 @@ class App {
         return self::$_instance;
     }
     
-    public function application_start(){   	
-    	$router = new BaseRouter();
-    	
-    	$this->loadComponents($this->getSetting('components'));
-    	echo $this->request->getQuery();
-    	
-    	$controllerAction = $router->getControllerAction();
-    	$controllerName = $controllerAction['controller'];
-    	$controllerAction['controller'][0] = strtoupper($controllerAction['controller'][0]);
-    	$controllerAction['controller'] = $controllerAction['controller'].'Controller';
-		
-		$controller = new $controllerAction['controller']($controllerName, $controllerAction['action']);
+    public function application_start(){   	   		
+    	try {
+    		$this->loadComponents($this->getSetting('components'));
+    		$this->router->getControllerAction();
+		} catch (BaseException $e) {
+		    $e->callBack();
+		}
     }
     
     public static function autoload($class_name){
 	    $folder = 'components'; // папка с компонентами
+	    
 	    if(preg_match('/Controller$/', $class_name))
-	    	$folder = 'controllers'; //
+	    	$folder = 'controllers'; 
+	    
 	    if(preg_match('/^Base/', $class_name))
 	    	$folder = 'base';
-	    	
-	    include_once($folder . '/' . $class_name . '.php');
+	   	
+	    if(!file_exists($folder . '/' . $class_name . '.php')){
+	    	throw new BaseException('File ' . $class_name . '.php was not found in folder "' . $folder . '"', $folder);
+	    }
+	    
+		include_once($folder . '/' . $class_name . '.php');
     }
     
     public function getSetting($setting){
@@ -64,10 +65,6 @@ class App {
     		$settingValue = $config[$setting];
     	
     	return $settingValue;
-    }
-    
-    public function setDefaultComponents(){
-    	
     }
     
     public function loadComponents($components, $path = false){
@@ -83,7 +80,7 @@ class App {
 }
 
 spl_autoload_register(array('App','autoload'));
-// это то, что делает функция spl_autoload_register - мы регестрируем какую-то функцию(в данном случае в классе App)
+// что делает функция spl_autoload_register - мы регестрируем какую-то функцию(в данном случае в классе App)
 // как __autoload(); тобишь когда класс не будет находится будет вызываться не __autoload(), а App::autoload()
 // понял? это самописная функция. смотри. в том, что она находится не в глобальном пространстве хуй знает где. а в нашем классе
 // который отвечает за все приложение. app - application. разделение логики. потому что в индексе нету записей

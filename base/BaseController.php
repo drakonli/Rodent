@@ -4,13 +4,13 @@ class BaseController {
 	protected $action;
 	protected $layout;
 	
-	public function __construct($controller, $action){
+	public function __construct($controller, $action, $customVariables = array()){
 		$this->controller = $controller;
 		$this->action = $action;
-		$action = $this->action.'Action';
+		$action = ucfirst($this->action) . 'Action';
 		$this->layout = 'layout';
 		
-		$this->$action();
+		$this->$action($customVariables);
 	}
 	
 	protected function renderTemplate($template,$variables = array()){

@@ -14,7 +14,6 @@ class MainController extends BaseController
 		//model
 		$modelResults = array('miSHA'=>'stupidfuck','artur'=>'thebest');
 	
-
 		$this->render('mainpage', array('name' => $myName, 'surname' => $mySurname,'modelResults'=>$modelResults));
 	}
 	

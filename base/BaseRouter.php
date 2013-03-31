@@ -13,7 +13,9 @@ class BaseRouter extends BaseRequest
 		if($queryArray['action'])
 			$action 	= $queryArray['action'];
 		
-		return array('controller' => $controller, 'action' => $action);
+    	$controllerName = ucfirst($controller) . 'Controller';
+		
+		$controller = new $controllerName($controller, $action);
 	}
 	
 	private function parseQuery(){
