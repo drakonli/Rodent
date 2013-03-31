@@ -12,8 +12,9 @@ class BaseException extends Exception
 		}
 	}
 	
-	public function callBack(){
+	public function invokeCallback(){
 		$function = $this->function;
+			
 		$this->$function();
 	}
 	

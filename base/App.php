@@ -38,7 +38,7 @@ class App {
     		$this->loadComponents($this->getSetting('components'));
     		$this->router->getControllerAction();
 		} catch (BaseException $e) {
-		    $e->callBack();
+		    $e->invokeCallback();
 		}
     }
     
@@ -50,6 +50,9 @@ class App {
 	    
 	    if(preg_match('/^Base/', $class_name))
 	    	$folder = 'base';
+	    
+		if(preg_match('/Model$/', $class_name))
+	    	$folder = 'model'; 
 	   	
 	    if(!file_exists($folder . '/' . $class_name . '.php')){
 	    	throw new BaseException('File ' . $class_name . '.php was not found in folder "' . $folder . '"', $folder);

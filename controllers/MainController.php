@@ -14,16 +14,13 @@ class MainController extends BaseController
 		//model
 		$modelResults = array('miSHA'=>'stupidfuck','artur'=>'thebest');
 	
-		$this->render('mainpage', array('name' => $myName, 'surname' => $mySurname,'modelResults'=>$modelResults));
-	}
-	
-	public function bamAction()
-	{
+		$book = new BooksModel();
+		$book->id = 8;
 		
-	}
-	
-	public function fuckAction()
-	{
-		
+		$bam = $book->findOne();
+		$bam->created = time();
+		$bam->save();
+
+		$this->render('mainpage');
 	}
 }

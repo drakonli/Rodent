@@ -5,6 +5,14 @@ $config = array(
 		
 			'components' => array(					
 						'request' => 'BaseRequest',
-						'router'  => 'BaseRouter'
+						'router'  => 'BaseRouter',
+					),
+			
+			'sql' => array(
+						'address' => 'localhost',
+						'dbName' => 'rodent',
+						'username' => 'root',
+						'password' => '123',
+						'persist' => false				
 					)
 		);
