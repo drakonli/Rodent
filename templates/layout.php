@@ -12,22 +12,22 @@
 <div id='main'>		
 	<div id='submain'>
 		<div id='header'>
-			<a href='file:///D:/programmirovanie/polls_for_all/index.html'>
-				<div id='logo'>	dsdsds			
-					<div id='logo-img'>
-						<a href='file:///D:/programmirovanie/polls_for_all/index.html'>
-							<img src='resources/img/logo-img.png'>
-						</a>
-					</div>
-					<a href='file:///D:/programmirovanie/polls_for_all/index.html'>					
-						<div id='logo-PollsForAll'><img src='resources/img/logo-PollsForAll.png'> 
-						</div>
-					</a>
+			
+			<div id='logo'>	
+				<div id='logo-img'>
 					<a href='file:///D:/programmirovanie/polls_for_all/index.html'>
-						<div id='logo-text'>текст под логотипом 
-						</div>
+						<img src='resources/img/logo-img.png'>
 					</a>
 				</div>
+				<a href='file:///D:/programmirovanie/polls_for_all/index.html'>					
+					<div id='logo-PollsForAll'><img src='resources/img/logo-PollsForAll.png'> 
+					</div>
+				</a>
+				<a href='file:///D:/programmirovanie/polls_for_all/index.html'>
+					<div id='logo-text'>текст под логотипом 
+					</div>
+				</a>
+			</div>
 			
 			<div id='menu'>
 				<a href='https://vk.com'>
@@ -62,14 +62,12 @@
 				<a class='link-footer' href='https://youtube.com'>Item
 				</a>
 				</div>
-				<div class='footer-link-divider'>|
-				</div>
+				<div class='footer-link-divider'>|</div>
 				<div class='footer-link'>
 					<a class='link-footer' href='https://youtube.com'>Item
 					</a>
 				</div>
-				<div class='footer-link-divider'>|
-				</div>
+				<div class='footer-link-divider'>|</div>
 				<div class='footer-link'>
 				<a class='link-footer' href='https://youtube.com'>Item
 				</a>
@@ -104,35 +102,27 @@
 				<a class='link-footer' href='https://youtube.com'>Item
 				</a>
 				</div>
-				<div class='footer-link-divider'>|
-				</div>
+				<div class='footer-link-divider'>|</div>
 				<div class='footer-link'>
-				<a class='link-footer' href='https://youtube.com'>Item
-				</a>
+					<a class='link-footer' href='https://youtube.com'>Item</a>
 				</div>
-				<div class='footer-link-divider'>|
-				</div>
+				<div class='footer-link-divider'>|</div>
 				<div class='footer-link'>
-				<a class='link-footer' href='https://youtube.com'>Item
-				</a>
+					<a class='link-footer' href='https://youtube.com'>Item</a>
 				</div>
 			</div>
 			<div id='footer-social-container'>
 				<a href='https://facebook.com'>
-					<div id='footer-social-facebook'>
-					</div>
+					<div id='footer-social-facebook'></div>
 				</a>				
 				<a href='https://twitter.com'>
-					<div id='footer-social-twitter'>			
-					</div>
+					<div id='footer-social-twitter'></div>
 				</a>				
 				<a href='https://youtube.com'>
-					<div id='footer-social-youtube'>
-					</div>
+					<div id='footer-social-youtube'></div>
 				</a>
 				<a href='https://plus.google.com/'>						
-					<div id='footer-social-googleplus'>
-					</div>
+					<div id='footer-social-googleplus'></div>
 				</a>				
 			</div>
 		</div>

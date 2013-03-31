@@ -33,8 +33,12 @@ class App {
         return self::$_instance;
     }
     
-    public function application_start(){
+    public function application_start(){   	
     	$router = new BaseRouter();
+    	
+    	$this->loadComponents($this->getSetting('components'));
+    	echo $this->request->getQuery();
+    	
     	$controllerAction = $router->getControllerAction();
     	$controllerName = $controllerAction['controller'];
     	$controllerAction['controller'][0] = strtoupper($controllerAction['controller'][0]);
@@ -60,6 +64,20 @@ class App {
     		$settingValue = $config[$setting];
     	
     	return $settingValue;
+    }
+    
+    public function setDefaultComponents(){
+    	
+    }
+    
+    public function loadComponents($components, $path = false){
+    	if(is_array($components)){
+    		foreach($components as $name => $className){
+    			$this->$name = new $className;
+    		}
+    		return true;
+    	}
+  		return false;
     }
 
 }
