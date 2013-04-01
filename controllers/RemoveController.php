@@ -1,7 +1,7 @@
 <?php 
 class RemoveController extends Controller
 {
-	protected $action = 'books'; // default action for this controller
+	protected $action = 'book'; // default action for this controller
 	
 	public function bookAction() 
 	{
@@ -39,12 +39,12 @@ class RemoveController extends Controller
 			App::get()->endApp();
 		}
 		
-		$books = new BookModel();
+		$authors = new AuthorModel();
 		$data = array();
 		if($parameters['id']){
 			foreach($parameters['id'] as $key => $id){
-				$books->id = $key;
-				$currentObject = $books->findOne();
+				$authors->id = $key;
+				$currentObject = $authors->findOne();
 				if(!empty($currentObject)){
 					$data[$this->action][$key] = $currentObject->toArray();
 					if($currentObject->remove()){
