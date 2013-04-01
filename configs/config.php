@@ -1,7 +1,8 @@
 <?php
 $config = array(
-			'defaultController' => 'main',
+			'defaultController' => 'get',
 			'defaultAction' => 'index',
+			'defaultLayout' => 'layout',
 		
 			'components' => array(					
 						'request' => 'BaseRequest',

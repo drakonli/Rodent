@@ -1,5 +1,5 @@
 <?php
-class ErrorsController extends BaseController
+class ErrorsController extends Controller
 {
 	public function indexAction($variables){
 		$error = ($variables['error']) ? $variables['error'] : null;

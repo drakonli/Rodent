@@ -6,9 +6,19 @@ class BaseController {
 	
 	public function __construct($controller, $action, $customVariables = array()){
 		$this->controller = $controller;
-		$this->action = $action;
-		$action = ucfirst($this->action) . 'Action';
-		$this->layout = 'layout';
+			
+		if(!$action)
+			$this->action = isset($this->action) ? $this->action : App::get()->getSetting('defaultAction');
+		else
+			$this->action = $action;
+		
+		$action = $this->action . 'Action';
+		
+		$this->layout = App::get()->getSetting('defaultLayout');
+		
+		if(!method_exists($this, $action)){
+			throw new BaseException('Method ' . $action . '.php was not found in controller "' . get_class($this) . '"', 'controllers');
+		}
 		
 		$this->$action($customVariables);
 	}
