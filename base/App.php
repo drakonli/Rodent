@@ -2,8 +2,8 @@
 /**
  * App class file for Rodent framework.
  *
- * I developed this little framework in two days
- * so it is a bit hardcoded :)
+ * I developed this little framework in 
+ * couple of days so it is a bit hardcoded
  * 
  * @author Artur <artur.drakonli@gmail.com>
  *
