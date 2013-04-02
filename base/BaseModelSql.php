@@ -20,25 +20,6 @@ class BaseModelSql extends PDO
 	}
 	
 	/**
-	 * Retrieves a custom query
-	 * WARNING! Escape this array properly
-	 * @author Artur
-	 * @version 1.0
-	 * @param array $params - array of query parameters
-	 * @return array
-	 */
-	public function findCustom($params){
-		$where = $this->constructRetrieveQuery($params);
-
-		$data = $this->runQuery('retrieve', $where);
-		if($data){
-			$data = $data->fetchAll();
-			$data = $this->dataToObject($data);
-		}
-		
-		return $data;
-	}
-	/**
 	 * Retrieves all records
 	 * that are defined in an object
 	 * @author Artur
@@ -73,17 +54,24 @@ class BaseModelSql extends PDO
 	
 	/**
 	 * Retrieves records by properties
-	 * that are defined in an object
+	 * that are defined in an object OR
+	 * if $param is specified - retrieves
+	 * custom query(needs some work - retrieves
+	 * only AND queries) OR if nothing is specified
+	 * retrieves all records
 	 * @author Artur
 	 * @version 1.0
 	 * @return array - query
 	 */
-	public function find(){
-		$data = $this->runQuery('retrieve');	
+	public function find($params = null){
+		$where = $this->constructRetrieveQuery($params);
+		$data = $this->runQuery('retrieve', $where);
+				
 		if($data){
 			$data = $data->fetchAll();
 			$data = $this->dataToObject($data);
 		}
+		
 		return $data;
 	}
 	
@@ -105,7 +93,10 @@ class BaseModelSql extends PDO
 			$this->recieved = true;
 		}
 		
-		return $result;
+		if($result)
+			$this->afterSave();
+		
+		return $result ? true : false;
 	}
 	
 	/**
@@ -118,32 +109,27 @@ class BaseModelSql extends PDO
 		$result = $this->runQuery('delete');
 		return $result;
 	}
-	
-	public function runQuery($queryType, $where = null){
-		$query = $this->getQuery($queryType, $where);
-		$data = $query->execute();
-		
-		if(!$data){
-			$error = $query->errorInfo();
-			throw new BaseException('SQL ERROR: ' . $error[2]);
-		}
-		
-		return $query;
-	}
-	
-	public function getQuery($queryType, $where){
-		$methodName = 'get' . ucfirst($queryType) . 'Query';	
-		return $this->$methodName($this->getProperties(), $where);
-	}
 
+	/**
+	 * Returns current object's properties list
+	 * @author Artur
+	 * @version 1.0
+	 * @return array - query
+	 */
 	public function getProperties(){
 		return $this->propertiesList();
 	}
 	
+	/**
+	 * Converts current object to array
+	 * stripping protected and private properties
+	 * @author Artur
+	 * @version 1.0
+	 * @return array - query
+	 */
 	public function toArray(){
 		$data = (array) $this;
-		foreach($data as $relatedKey => &$related){
-			
+		foreach($data as $relatedKey => &$related){	
 			if(is_object($related)){
 				$related = (array) $related;
 				foreach($related as $key => $value){						
@@ -159,6 +145,24 @@ class BaseModelSql extends PDO
 
 		return $data;
 	}
+	
+	private function getQuery($queryType, $where){
+		$methodName = 'get' . ucfirst($queryType) . 'Query';
+		return $this->$methodName($this->getProperties(), $where);
+	}
+	
+	private function runQuery($queryType, $where = null){
+		$query = $this->getQuery($queryType, $where);
+		$data = $query->execute();
+	
+		if(!$data){
+			$error = $query->errorInfo();
+			throw new BaseException('SQL ERROR: ' . $error[2]);
+		}
+	
+		return $query;
+	}
+	
 	//C
 	private function getCreateQuery($properties){
 		$fields = "";
@@ -194,7 +198,7 @@ class BaseModelSql extends PDO
 		if(isset($where) && $where == 'all'){
 			$fields = null;
 		}
-
+		
 		if(!$where){
 			foreach($properties as $prop){
 				if(isset($this->$prop)){
@@ -206,10 +210,19 @@ class BaseModelSql extends PDO
 					$counter++;
 				}
 			}
+			if(!$counter){
+				$fields = null;
+			}
 		}
 
 		$query = $this->prepare("SELECT * FROM " . $this->table . $fields);
 		
+		if($where && isset($where['data'])){
+			foreach($where['data'] as $prop => $value){
+				$query->bindValue(':' . $prop, $value);
+			}
+		}
+
 		if(!$where){			
 			foreach($properties as $prop){
 				if(isset($this->$prop)){
@@ -217,7 +230,7 @@ class BaseModelSql extends PDO
 				}
 			}
 		}
-		
+
 		return $query;		
 	}
 	
@@ -270,6 +283,14 @@ class BaseModelSql extends PDO
 	
 	private function getPropertieData($prop){
 		$propValue = $this->$prop;
+		$methodName = $prop . 'Validate';
+		
+		if(method_exists($this, $methodName)){
+			if(!$this->$methodName($this->$prop)){
+				throw new BaseException("Model: propertie '" . $prop . "' did not pass validation");
+			}
+		}
+		
 		if($this->$prop && isset($this->relations[$prop])){
 			if(!is_object($this->$prop) && !($this->$prop instanceof $this->relations[$prop])){
 				throw new BaseException('Model: propertie ' . $prop . " should be an instance of ". $this->relations[$prop]);
@@ -309,41 +330,60 @@ class BaseModelSql extends PDO
 	 * @version 1.0
 	 * @return array - 
 	 * 	array(
-	 *		'title' => array('=' , 'bam'),
+	 *		'title' => array('=' , var), - single condition for one parameter
 	 *		'id'    => array(
-	 *				array('>',7)
-     *			)
+	 *				array('>',var)
+     *			)  	                     - multiple conditions for one parameter
 	 *	);
 	 */
 	private function constructRetrieveQuery($params){
+		if(!isset($params))
+			return null;
+		
 		$query = "";
 		$data = array();
 		$delimiter = null;
+		$delimiterInside = null;
 		$count = 0;
+		$countInside = 0;
 		if(is_array($params)){			
-			foreach($params as $prop => $values){
+			foreach($params as $prop => $values){				
 				if($count == 1){
 					$delimiter = " AND ";
 				}
 				
 				$query .= $delimiter;
 				
+				if(isset($values[0]) && isset($values[1])
+						&& (!is_array($values[0]) && !is_array($values[1]))){
+					$query .= $prop . " " . $values[0] . " :" . $prop;
+					$data[$prop] = $values[1];
+				}
+				
 				if(isset($params[$prop][0]) && is_array($params[$prop][0])){
 					foreach($values as $queries){
-						if(isset($queries[0]) && isset($queries[1])){
-							$query .= $prop . " " . $queries[0] . " '" . $queries[1] . "'";
+						if($countInside == 1){
+							$delimiterInside = " AND ";
 						}
+						
+						$query .= $delimiterInside;
+
+						if(isset($queries[0]) && isset($queries[1])){
+							$query .= $prop . " " . $queries[0] . " :" . $prop . $countInside;
+							$data[$prop . $countInside] = $queries[1];
+						}
+						
+						$countInside++;
 					}
 				}
-				
-				if(isset($values[0]) && isset($values[1])){
-					$query .= $prop . " " . $values[0] . " '" . $values[1] . "'";
-				}
-				
+
+				$countInside = 0;
+				$delimiterInside = null;
 				$count++;
 			}
 		}
-		return array('query' => $query);
+
+		return array('query' => $query, 'data' => $data);
 	}
 	
 	private function getRelations(){

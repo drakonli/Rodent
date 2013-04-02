@@ -17,6 +17,13 @@ class BookModel extends BaseModelSql
 		return array('author' => 'AuthorModel');
 	}
 	
+	protected function idValidate($propValue){
+		if(preg_match('/[^0-9]/i',$propValue, $match))
+			return false;
+	
+		return true;
+	}
+	
 	protected function beforeSave(){
 		if(!isset($this->created))
 			$this->created = time();
