@@ -35,7 +35,9 @@ class NewController extends Controller
 		if(!$book->save()){
 			$this->sendError('Database error', $parameters['type']);
 			App::get()->endApp();
-		} 
+		}
+		
+		$book = $book->findOne();
 		
 		$data[$this->action][0] = $book->toArray();
 		$data[$this->action][0]['addedSuccess'] = true;
@@ -67,6 +69,8 @@ class NewController extends Controller
 			$this->sendError('Database error', $parameters['type']);
 			App::get()->endApp();
 		}
+		
+		$author = $author->findOne();
 		
 		$data[$this->action][0] = $author->toArray();
 		$data[$this->action][0]['addedSuccess'] = true;

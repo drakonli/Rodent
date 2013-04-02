@@ -4,13 +4,13 @@ URL:
 	
 	/get/author?id=AUTHOR_ID - returns author by id. if no id has been specified returns all authors.
 	
-	/new/book?title=TITLE_NAME&isbn=ISBN&author=AUTHOR_ID - creates a new book. when this is called current timestamp is placed in CREATED field
+	/new/book?title=TITLE_NAME&isbn=ISBN&author_id=AUTHOR_ID - creates a new book. when this is called current timestamp is placed in CREATED field
 	
 	/new/author?name=AUTHOR_NAME - creates new author
 	
-	/update/book?id=BOOK_ID&title=TITLENAME&isbn=ISBN&author=AUTHOR_ID - when a record is updated MODIFIED field is renewed with current timestamp
+	/update/book?id=BOOK_ID&title=TITLENAME&isbn=ISBN&author_id=AUTHOR_ID - when a record is updated MODIFIED field is renewed with current timestamp
 	
-	/update/author?id=AUTHOR_ID&name=NEWNAME - updates author by id(has only attribute NAME which validates by regexp [a-z_\-\.])
+	/update/author?id=AUTHOR_ID&name=NEW_AUTHOR_NAME - updates author by id(has only attribute NAME which validates by regexp [a-z_\-\.])
 	
 	/remove/book?id=BOOK_ID - removes book by id
 	
@@ -18,7 +18,7 @@ URL:
 
 	* every request has optional parameter "type", this parameter accepts two values: 'json' and 'xml'. json is default.
 	
-	* for /new/book request an AUTHOR needs to be created and it's ID inserted into request
+	* for /new/book request an AUTHOR (/new/author) needs to be created and it's ID inserted into request
 		
 	* in order to get AUTHOR_ID or BOOK_ID for some requests one has to /get/book or /get/author and look for returned ID values.
 	
