@@ -12,9 +12,9 @@ URL:
 	
 	/update/author?id=AUTHOR_ID&name=NEW_AUTHOR_NAME - updates author by id(has only attribute NAME which validates by regexp [a-z_\-\.])
 	
-	/remove/book?id=BOOK_ID - removes book by id
+	/remove/book?id=BOOK_ID - removes book by id. one can also specifie multiple id's like so - id,id,id - to remove multiple books by id
 	
-	/remove/author?id=AUTHOR_ID - removes author by id
+	/remove/author?id=AUTHOR_ID - removes author by id. one can also specifie multiple id's like so - id,id,id - to remove multiple authors by id
 
 	* every request has optional parameter "type", this parameter accepts two values: 'json' and 'xml'. json is default.
 	

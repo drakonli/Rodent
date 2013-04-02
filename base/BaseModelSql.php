@@ -21,7 +21,6 @@ class BaseModelSql extends PDO
 	
 	/**
 	 * Retrieves all records
-	 * that are defined in an object
 	 * @author Artur
 	 * @version 1.0
 	 * @return array
@@ -61,6 +60,7 @@ class BaseModelSql extends PDO
 	 * retrieves all records
 	 * @author Artur
 	 * @version 1.0
+	 * @params - array of query params
 	 * @return array - query
 	 */
 	public function find($params = null){
