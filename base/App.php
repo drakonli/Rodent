@@ -1,4 +1,13 @@
 <?php
+/**
+ * App class file for Rodent framework.
+ *
+ * I developed this little framework in two days
+ * so it is a bit hardcoded :)
+ * 
+ * @author Artur <artur.drakonli@gmail.com>
+ *
+ */
 class App {
     protected static $_instance; 
     public $rootDir;
