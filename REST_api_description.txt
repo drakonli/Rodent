@@ -18,4 +18,7 @@ URL:
 
 	* every request has optional parameter "type", this parameter accepts two values: 'json' and 'xml'. json is default.
 	
+	* for /new/book request an AUTHOR needs to be created and it's ID inserted into request
+		
 	* in order to get AUTHOR_ID or BOOK_ID for some requests one has to /get/book or /get/author and look for returned ID values.
+	
