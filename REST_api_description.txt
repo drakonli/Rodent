@@ -1,8 +1,8 @@
 URL:
 
-	/get/book?id=BOOK_ID - returns book by id. if no id has been specified returns all books.
+	/get/book?id=BOOK_ID - returns book by id. if no id has been specified returns all books. one can also specifie multiple id's like so - id,id,id - to get multiple books by id
 	
-	/get/author?id=AUTHOR_ID - returns author by id. if no id has been specified returns all authors.
+	/get/author?id=AUTHOR_ID - returns author by id. if no id has been specified returns all authors. one can also specifie multiple id's like so - id,id,id - to get multiple authors by id 
 	
 	/new/book?title=TITLE_NAME&isbn=ISBN&author_id=AUTHOR_ID - creates a new book. when this is called current timestamp is placed in CREATED field
 	
