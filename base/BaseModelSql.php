@@ -217,8 +217,8 @@ class BaseModelSql extends PDO
 
 		$query = $this->prepare("SELECT * FROM " . $this->table . $fields);
 		
-		if($where && isset($where['data'])){
-			foreach($where['data'] as $prop => $value){
+		if($where && is_array($where) && isset($where['querydata'])){			
+			foreach($where['querydata'] as $prop => $value){
 				$query->bindValue(':' . $prop, $value);
 			}
 		}
@@ -383,7 +383,7 @@ class BaseModelSql extends PDO
 			}
 		}
 
-		return array('query' => $query, 'data' => $data);
+		return array('query' => $query, 'querydata' => $data);
 	}
 	
 	private function getRelations(){

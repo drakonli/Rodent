@@ -6,3 +6,4 @@ require_once('configs/config.php');
 require_once('base/App.php');
 
 App::get()->application_start();
+

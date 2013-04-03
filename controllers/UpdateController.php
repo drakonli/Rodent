@@ -107,7 +107,9 @@ protected $action = 'book'; // default action for this controller
 		if($type != 'json' && $type != 'xml'){
 			return false;
 		}
-	
+		
+		$this->type = $type;
+		
 		if(!$id){
 			return false;
 		}

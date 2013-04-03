@@ -4,7 +4,7 @@ class GetController extends Controller
 {
 	protected $action = 'book'; // default action for this controller
 
-	public function bookAction() 
+	public function bookAction()
 	{
 		$parameters = $this->parseRequest();
 		
@@ -75,19 +75,25 @@ class GetController extends Controller
 		$type = App::get()->request->getParam('type', $this->types['default']);
 		$id   = App::get()->request->getParam('id');
 		$ids  = null;
+		
 		if(!in_array($type, $this->types)){
 			return false;
 		}
-
+		
+		$this->type = $type;
+		
 		if($id){
 			$id = explode(',',$id);
+
 			if(!count($id)){
 				return false;
 			}
+			
 			$ids = array();
+			
 			foreach($id as $value){
 				$ids[intval($value)] = 0;
-			}	
+			}
 		}
 	
 		$request = array('type' => $type, 'id' => $ids);

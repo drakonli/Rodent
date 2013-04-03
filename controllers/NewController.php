@@ -89,7 +89,9 @@ class NewController extends Controller
 		if($type != 'json' && $type != 'xml'){
 			return false;
 		}
-	
+		
+		$this->type = $type;
+		
 		if(!$author || !$isbn || !$title){
 			return false;
 		}

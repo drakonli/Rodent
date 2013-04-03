@@ -62,9 +62,12 @@ class RemoveController extends Controller
 		$type = App::get()->request->getParam('type', $this->types['default']);
 		$id   = App::get()->request->getParam('id');
 		$ids  = null;
+		
 		if(!in_array($type, $this->types)){
 			return false;
 		}
+		
+		$this->type = $type;
 		
 		if($id){
 			$id = explode(',',$id);

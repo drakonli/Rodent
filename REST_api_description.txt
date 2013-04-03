@@ -20,5 +20,4 @@ URL:
 	
 	* for /new/book request an AUTHOR (/new/author) needs to be created and it's ID inserted into request
 		
-	* in order to get AUTHOR_ID or BOOK_ID for some requests one has to /get/book or /get/author and look for returned ID values.
-	
+	* in order to get AUTHOR_ID or BOOK_ID for some requests one has to /get/book or /get/author and look for returned ID values.	
