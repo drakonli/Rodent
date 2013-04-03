@@ -146,11 +146,6 @@ class BaseModelSql extends PDO
 		return $data;
 	}
 	
-	private function getQuery($queryType, $where){
-		$methodName = 'get' . ucfirst($queryType) . 'Query';
-		return $this->$methodName($this->getProperties(), $where);
-	}
-	
 	private function runQuery($queryType, $where = null){
 		$query = $this->getQuery($queryType, $where);
 		$data = $query->execute();
@@ -161,6 +156,11 @@ class BaseModelSql extends PDO
 		}
 	
 		return $query;
+	}
+	
+	private function getQuery($queryType, $where){
+		$methodName = 'get' . ucfirst($queryType) . 'Query';
+		return $this->$methodName($this->getProperties(), $where);
 	}
 	
 	//C

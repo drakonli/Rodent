@@ -9,7 +9,7 @@ class GetController extends Controller
 		$parameters = $this->parseRequest();
 		
 		if(!$parameters){
-			$this->sendError('Wrong parameters!', $parameters['type']);
+			$this->sendError('Wrong parameters!');
 			App::get()->endApp();
 		}
 		
@@ -17,8 +17,8 @@ class GetController extends Controller
 		$data = array();
 		
 		if($parameters['id']){
-			foreach($parameters['id'] as $key => $id){
-				$books->id = $key;
+			foreach($parameters['id'] as $id => $value){
+				$books->id = $id;
 				$currentObject = $books->findOne();
 				if(!empty($currentObject)){
 					$data[$this->action][] = $currentObject->toArray();
@@ -42,7 +42,7 @@ class GetController extends Controller
 		$parameters = $this->parseRequest();
 		
 		if(!$parameters){
-			$this->sendError('Wrong parameters!', $parameters['type']);
+			$this->sendError('Wrong parameters!');
 			App::get()->endApp();
 		}
 		

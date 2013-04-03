@@ -8,7 +8,7 @@ class NewController extends Controller
 		$parameters = $this->parseRequestBook();
 		
 		if(!$parameters){
-			$this->sendError('Wrong parameters', $parameters['type']);
+			$this->sendError('Wrong parameters');
 			App::get()->endApp();
 		}
 		
@@ -52,7 +52,7 @@ class NewController extends Controller
 		$parameters = $this->parseRequestAuthor();
 		
 		if(!$parameters){
-			$this->sendError('Wrong parameters', $parameters['type']);
+			$this->sendError('Wrong parameters');
 			App::get()->endApp();
 		}
 		
@@ -109,6 +109,8 @@ class NewController extends Controller
 			return false;
 		}
 
+		$this->type = $type;
+		
 		if(!$name){
 			return false;	
 		}

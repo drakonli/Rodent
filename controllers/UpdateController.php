@@ -9,7 +9,7 @@ protected $action = 'book'; // default action for this controller
 		$modified   = false;
 		
 		if(!$parameters){
-			$this->sendError('Wrong parameters', $parameters['type']);
+			$this->sendError('Wrong parameters');
 			App::get()->endApp();
 		}
 		
@@ -66,7 +66,7 @@ protected $action = 'book'; // default action for this controller
 		$parameters = $this->parseRequestAuthor();
 		
 		if(!$parameters){
-			$this->sendError('Wrong parameters', $parameters['type']);
+			$this->sendError('Wrong parameters');
 			App::get()->endApp();
 		}
 		
@@ -128,6 +128,8 @@ protected $action = 'book'; // default action for this controller
 			return false;
 		}
 	
+		$this->type = $type;
+		
 		if(!$id){
 			return false;
 		}
