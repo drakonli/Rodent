@@ -1,5 +1,5 @@
 <?php 
-class BaseRouter extends BaseRequest
+class BaseRouter
 {
 	public function getControllerAction(){
 		$controller = App::get()->getSetting('defaultController');
@@ -15,7 +15,7 @@ class BaseRouter extends BaseRequest
 	}
 	
 	private function parseQuery(){
-		$query = parent::getQuery();
+		$query = App::get()->request->getQuery();
 		
 		preg_match('/^\/([^\/\#?]*)\/?([^\/\?#]*)/', $query, $routeMatches);
 

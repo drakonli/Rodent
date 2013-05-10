@@ -49,7 +49,7 @@ class RemoveController extends Controller
 					$data[$this->action][$key] = $currentObject->toArray();
 					if($currentObject->remove()){
 						$data[$this->action][$key]['removeSuccess'] = true;
-					}					
+					}
 				}
 			}
 		}

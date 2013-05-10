@@ -14,7 +14,7 @@ class BaseController {
 		
 		$action = $this->action . 'Action';
 		
-		$this->layout = App::get()->getSetting('defaultLayout');
+		$this->layout = isset($this->layout) ? $this->layout : App::get()->getSetting('defaultLayout');
 		
 		if(!method_exists($this, $action)){
 			throw new BaseException('Method ' . $action . '.php was not found in controller "' . get_class($this) . '"', 'controllers');

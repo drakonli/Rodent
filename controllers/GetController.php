@@ -19,6 +19,10 @@ class GetController extends Controller
 		if($parameters['id']){
 			foreach($parameters['id'] as $id => $value){
 				$books->id = $id;
+				/*$author = new AuthorModel();
+				$author->id = 1;
+				$author = $author->findOne();
+				$books->author = $author;*/
 				$currentObject = $books->findOne();
 				if(!empty($currentObject)){
 					$data[$this->action][] = $currentObject->toArray();
@@ -27,12 +31,12 @@ class GetController extends Controller
 		}
 		
 		if(!$parameters['id']){
-			$objects = $books->findAll();
+			$objects = $books->findAll();			
 			foreach($objects as $currentObject){
-				$data[$this->action][] = $currentObject->toArray();
+				$data[$this->action][] = $currentObject->toArray();				
 			}
 		}
-		
+				
 		$data = $this->formatData($data, $parameters['type']);
 
 		$this->render($this->action, array('data' => $data));

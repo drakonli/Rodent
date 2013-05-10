@@ -27,13 +27,13 @@ class BaseModelSql extends PDO
 	 */
 	public function findAll(){
 		$data = $this->runQuery('retrieve', 'all');
-		if($data){
+		if($data){			
 			$data = $data->fetchAll();
 			$data = $this->dataToObject($data);
 		}
 		return $data;
 	}
-	
+		
 	/**
 	 * Retrieves a record by object
 	 * properties
@@ -180,11 +180,11 @@ class BaseModelSql extends PDO
 			$counter++;
 		}
 	
-		$query = $this->prepare("INSERT INTO " . $this->table . " ({$fields}) VALUES ({$values})");
+		$query = $this->prepare("INSERT INTO " . $this->table . " ({$fields}) VALUES ({$values})");		
 	
 		foreach($properties as $prop){
 			$query->bindValue(':' . $prop, isset($this->$prop) ? $this->getPropertieData($prop) : NULL);
-		}
+		}		
 	
 		return $query;
 	}
@@ -198,7 +198,7 @@ class BaseModelSql extends PDO
 		if(isset($where) && $where == 'all'){
 			$fields = null;
 		}
-		
+//		return array('primary' => 'id','author','title','isbn','created','modified');
 		if(!$where){
 			foreach($properties as $prop){
 				if(isset($this->$prop)){
@@ -207,15 +207,18 @@ class BaseModelSql extends PDO
 					}
 					
 					$fields .= $delimiter . $prop . " = :" . $prop;
+				//	" WHERE id = :id"
 					$counter++;
 				}
 			}
+
 			if(!$counter){
 				$fields = null;
 			}
 		}
 
 		$query = $this->prepare("SELECT * FROM " . $this->table . $fields);
+		
 		
 		if($where && is_array($where) && isset($where['querydata'])){			
 			foreach($where['querydata'] as $prop => $value){
@@ -226,8 +229,8 @@ class BaseModelSql extends PDO
 		if(!$where){			
 			foreach($properties as $prop){
 				if(isset($this->$prop)){
-					$query->bindValue(':' . $prop, $this->getPropertieData($prop));
-				}
+					$query->bindValue(':' . $prop, $this->getPropertieData($prop));					
+				}					
 			}
 		}
 
@@ -255,7 +258,7 @@ class BaseModelSql extends PDO
 		foreach($properties as $prop){
 			$query->bindValue(':' . $prop, isset($this->$prop) ? $this->getPropertieData($prop) : NULL);
 		}
-
+		
 		return $query;
 	}
 	
@@ -299,21 +302,23 @@ class BaseModelSql extends PDO
 		}
 		
 		return $propValue;
+		
 	}
+	
 	
 	private function dataToObject($data){
 		$objects = array();
 		$className = get_class($this);
 		foreach($data as $key => $value){
-			$objects[$key] = new $className();
+			$objects[$key] = new $className();			
 			foreach($value as $propName => $propValue){
 				if(!is_numeric($propName)){
 					if(!empty($this->relations) && isset($this->relations[$propName])){
 						$relatedObject = new $this->relations[$propName]();
 						$relatedObjectProps = $relatedObject->getProperties();
-						$relatedObject->$relatedObjectProps['primary'] = $propValue;
+						$relatedObject->$relatedObjectProps['primary'] = $propValue;						
 						$relatedObject = $relatedObject->findOne();
-						$objects[$key]->$propName = $relatedObject;
+						$objects[$key]->$propName = $relatedObject;						
 						continue;
 					}
 					$objects[$key]->$propName = $propValue;
@@ -321,7 +326,7 @@ class BaseModelSql extends PDO
 			}
 			$objects[$key]->recieved = true;
 		}
-		return $objects;
+		return $objects;		
 	}
 	
 	/**
@@ -346,8 +351,8 @@ class BaseModelSql extends PDO
 		$delimiterInside = null;
 		$count = 0;
 		$countInside = 0;
-		if(is_array($params)){			
-			foreach($params as $prop => $values){				
+		if(is_array($params)){
+			foreach($params as $prop => $values){
 				if($count == 1){
 					$delimiter = " AND ";
 				}

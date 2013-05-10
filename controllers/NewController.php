@@ -39,8 +39,8 @@ class NewController extends Controller
 		
 		$book = $book->findOne();
 		
-		$data[$this->action][0] = $book->toArray();
-		$data[$this->action][0]['addedSuccess'] = true;
+		$data[$this->action][0] = $book->toArray();		
+		$data[$this->action][0]['addedSuccess'] = true;		
 		
 		$data = $this->formatData($data, $parameters['type']);
 
