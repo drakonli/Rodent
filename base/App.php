@@ -27,8 +27,9 @@ class App {
         return self::$_instance;
     }
     
-    public function application_start(){   	   		
+    public function application_start(){		
     	try {
+    		session_start();
     		$this->loadComponents($this->getSetting('components'));
     		$this->router->getControllerAction();
 		} catch (BaseException $e) {
@@ -77,7 +78,10 @@ class App {
     public function endApp($message = null){
     	exit($message);
     }
-
+    
+    public function generateHash($hashString){
+    	return $hashString = sha1(base64_encode(md5($hashString) . App::get()->getSetting('appSecretKey')));
+    }
 }
 
 spl_autoload_register(array('App','autoload'));
