@@ -1,11 +1,12 @@
 <?php
-class BaseUser 
+abstract class BaseUser
 {
 	public $rememberMe = false;
 	public $loggedIn   = false;
-	protected $options = array();
+	protected $hashOptions = array();
 	protected $name;
 	protected $password;
+	protected $delimiter = "&";
 	
 	public function __construct(){
 		$this->getStatus();
@@ -31,7 +32,7 @@ class BaseUser
 	}
 	
 	public function setUserOption($optionName,$optionValue){
-		$this->options[$optionName] = $optionValue;
+		$this->hashOptions[$optionName] = "$optionValue";
 	}
 	
 	public function getStatus(){
@@ -45,6 +46,8 @@ class BaseUser
 			$this->loggedIn = true;
 			return $this->loggedIn;
 		}
+		/* --session */
+		
 		/* cookie */
 		$cookies = App::get()->request->getCookies();
 		$userCookie = array();	
@@ -57,9 +60,29 @@ class BaseUser
 		}
 	
 		if(!empty($userCookie)){
-			$cookieArray = explode('|',$userCookie['value']);
-			var_dump($cookieArray);
+			$parsedCookie = $this->parseUserCookie($userCookie);
+			if(isset($parsedCookie['rodusrname']) &&
+					$userCookie['name'] == App::get()->generateHash($parsedCookie['rodusrname'])){
+				$this->name = $parsedCookie['rodusrname'];
+				$this->username = $parsedCookie['rodusrname'];
+				$hash = $parsedCookie['hash'];
+				
+				unset($parsedCookie['hash']);
+				unset($parsedCookie['rodusrname']);
+				
+				foreach($parsedCookie as $key => $value)
+						$this->hashOptions[$key] = $value;
+				
+				if($this->generateUserHash() == $hash){
+					foreach($this->hashOptions as $key => $value)
+						$this->$key = $value;
+					
+					$this->loggedIn = true;
+					$this->rememberMe = true;
+				}
+			}
 		}
+		/* --cookie */
 		
 		return $this->loggedIn;
 	}
@@ -71,17 +94,22 @@ class BaseUser
 			$this->loggedIn = $this->generateUserSession();
 	}
 	
+	private function generateUserSession(){
+		$this->hashOptions['username'] = $this->name;
+		App::get()->request->removeCookie(App::get()->generateHash($this->name));
+		App::get()->request->setSession('user', $this->hashOptions);
+	
+		return true;
+	}
+	
 	private function generateUserCookie(){
-		$delimiter = "&";
+		$delimiter = $this->delimiter;
 		$params = "rodusrname=$this->name" . $delimiter;
-		$hashString = $this->name . sha1($this->password);
 		
-		foreach($this->options as $optionName => $optionValue){
+		foreach($this->hashOptions as $optionName => $optionValue)
 			$params .= $optionName . "=" . $optionValue . $delimiter;
-			$hashString .= $optionName . "=" . $optionValue . $delimiter;
-		}
 		
-		$cookieValue = App::get()->generateHash($hashString) . urlencode($delimiter . $params);
+		$cookieValue = $this->generateUserHash() . urlencode($delimiter . $params);
 		$cookieName  = App::get()->generateHash($this->name);
 
 		App::get()->request->removeSession('user');
@@ -90,15 +118,31 @@ class BaseUser
 		return true;
 	}
 	
-	private function generateUserSession(){
-		$this->options['username'] = $this->name;
-		App::get()->request->removeCookie(App::get()->generateHash($this->name));
-		App::get()->request->setSession('user', $this->options);
+	private function generateUserHash(){
+		$delimiter = $this->delimiter;
+		$hashString = "username=" . $this->name . $delimiter;
 		
-		return true;
+		foreach($this->hashOptions as $optionName => $optionValue){
+			$hashString .= $optionName . "=" . $optionValue . $delimiter;
+		}
+
+		return App::get()->generateHash($hashString);
 	}
 	
-	protected function authenticate(){
-		return true;
+	private function parseUserCookie($userCookie){
+		$cookieArray = array();
+		$cookie = explode($this->delimiter,$userCookie['value']);
+		$cookieArray['hash'] = $cookie[0];
+		unset($cookie[0]);
+		foreach($cookie as $key => $value){
+			if(!empty($value)){
+				list ($cKey, $cValue) = explode('=', $value, 2);
+				$cookieArray[$cKey] = $cValue;
+			}
+		}
+		
+		return $cookieArray;
 	}
+	
+	abstract protected function authenticate();
 }

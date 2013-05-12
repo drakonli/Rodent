@@ -1,5 +1,5 @@
 <?php
-class BaseModelSql extends PDO
+abstract class BaseModelSql extends PDO
 {
 	protected $table;
 	protected $recieved;
@@ -397,11 +397,7 @@ class BaseModelSql extends PDO
 	
 	protected function setRelations(){
 		return array();
-	}
-	
-	protected function propertiesList(){
-		return array();
-	}
+	}	
 	
 	protected function setPropertie($name, $value){
 		if(isset($this->$name)){
@@ -411,6 +407,7 @@ class BaseModelSql extends PDO
 		return false;
 	}
 	
+	abstract protected function propertiesList();
 	protected function beforeSave(){}
 	protected function  afterSave(){}
 }

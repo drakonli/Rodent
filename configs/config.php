@@ -7,7 +7,7 @@ $config = array(
 			'components' => array(				
 						'request' => 'BaseRequest',
 						'router'  => 'BaseRouter',
-						'user'	  => 'BaseUser'
+						'user'	  => 'User'
 					),
 			
 			'sql' => array(

@@ -43,4 +43,24 @@ class BaseRequest {
 		setcookie($name, "", time()-3600);
 		unset($_COOKIE[$name]);		
 	}
+	
+	public function redirect($url,$terminate=true,$statusCode=301)
+	{
+		if(strpos($url,'/')===0)
+			$url = $this->getHostInfo() . $url;
+		header('Location: '.$url, true, $statusCode);
+		if($terminate)
+			App::get()->endApp();
+	}
+	
+	public function getHostInfo(){
+		$url = "http";
+		if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
+				|| $_SERVER['SERVER_PORT'] == 443) {
+			$url .= "s";
+		}
+		$url .= '://' . $_SERVER['SERVER_NAME'];
+		
+		return $url;
+	}
 }
