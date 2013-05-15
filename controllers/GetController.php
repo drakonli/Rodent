@@ -26,7 +26,7 @@ class GetController extends Controller
 				$currentObject = $books->findOne();
 				if(!empty($currentObject)){
 					$data[$this->action][] = $currentObject->toArray();
-				}
+				}				
 			}
 		}
 		
@@ -34,7 +34,7 @@ class GetController extends Controller
 			$objects = $books->findAll();			
 			foreach($objects as $currentObject){
 				$data[$this->action][] = $currentObject->toArray();				
-			}
+			}			
 		}
 				
 		$data = $this->formatData($data, $parameters['type']);

@@ -232,8 +232,7 @@ abstract class BaseModelSql extends PDO
 					$query->bindValue(':' . $prop, $this->getPropertieData($prop));					
 				}					
 			}
-		}
-
+		}		
 		return $query;		
 	}
 	

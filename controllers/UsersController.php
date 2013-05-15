@@ -2,7 +2,7 @@
 class UsersController extends Controller
 {
 	public function indexAction(){
-		if(App::get()->user->loggedIn){
+		if(App::get()->user->loggedIn){					
 			echo 'Hello, ' . App::get()->user->username;
 			
 			 if(App::get()->user->isAdmin)
@@ -15,16 +15,21 @@ class UsersController extends Controller
 		}
 	}
 	
-	public function loginAction(){
-		$rememberMe = App::get()->request->getParam('rememberme',false);
-		$username   = App::get()->request->getParam('username',"");
-		$password   = App::get()->request->getParam('pswd',"");
-		$admin      = App::get()->request->getParam('adm',false);
+	public function loginAction(){		
+		$parameters = $this->parseRequestUser();
 		
+		if(!$parameters){
+			$this->sendError('Username or password is missing');
+			App::get()->endApp();
+		}					
+		
+		$admin      = App::get()->request->getParam('adm',false);
 		App::get()->user->setUserOption('isAdmin', $admin);
+		
+		$rememberMe = App::get()->request->getParam('rememberme',false);
 		App::get()->user->rememberMe = $rememberMe;
 		
-		if(App::get()->user->login($username,$password))
+		if(App::get()->user->login($parameters['username'],$parameters['pswd']))
 			App::get()->request->redirect('/users/');
 		else
 			echo 'failed to log in';
@@ -34,5 +39,40 @@ class UsersController extends Controller
 		App::get()->user->logout();
 		
 		App::get()->request->redirect('/users/');
+	}
+
+
+	public function GetUserAction() {
+		$user = new UserModel();
+		$parameters = $this->parseRequestBook();
+
+	}
+	public function NewUserAction() {
+		$user = new UserModel();
+		$parameters = $this->parseRequestBook();
+
+	}
+	public function UpdateUserAction() {
+		$user = new UserModel();
+		$parameters = $this->parseRequestBook();
+
+	}
+	public function RemoveUserAction() {
+		$user = new UserModel();
+		$parameters = $this->parseRequestBook();
+
+	}
+	
+	public function parseRequestUser() {		
+		$username   = App::get()->request->getParam('username',"");
+		$password   = App::get()->request->getParam('pswd',"");		
+		
+		if(!$username || !$password){
+			return false;
+		}
+		
+		$request = array('username' => $username, 'pswd' => $password);
+		
+		return $request;
 	}
 }

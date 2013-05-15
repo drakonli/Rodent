@@ -80,6 +80,37 @@ class NewController extends Controller
 		$this->render($this->action, array('data' => $data));
 	}
 	
+	public function userAction()
+	{
+		$parameters = $this->parseRequestUser();		
+	
+		if(!$parameters){
+			$this->sendError('Username or password is missing');			
+			App::get()->endApp();
+		}
+	
+		$user = new UserModel();
+		$user->username = $parameters['username'];		
+		$thisUser = $user->find();			
+	
+		if(!empty($thisUser)){			
+			$this->sendError('This username already exists');
+			App::get()->endApp();
+		}
+		
+		$user->password = App::get()->generateHash($parameters['pswd']);
+		
+		if(!$user->save()){
+			$this->sendError('Database error', $parameters['type']);
+			App::get()->endApp();
+		}
+		
+		$data = array ("message" => "Registration has been successful.
+		You'll be redirected to the main page in 5 seconds");
+	
+		$this->render($this->action, $data);
+	}
+	
 	private function parseRequestBook(){
 		$type   = App::get()->request->getParam('type','json');
 		$isbn   = App::get()->request->getParam('isbn', null);
@@ -117,6 +148,19 @@ class NewController extends Controller
 		
 		$request = array('type' => $type, 'name' => $name);
 
+		return $request;
+	}
+	
+	public function parseRequestUser() {		
+		$username   = App::get()->request->getParam('username',"");
+		$password   = App::get()->request->getParam('pswd',"");		
+		
+		if(!$username || !$password){
+			return false;
+		}
+		
+		$request = array('username' => $username, 'pswd' => $password);
+		
 		return $request;
 	}
 }

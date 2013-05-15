@@ -14,7 +14,7 @@ $config = array(
 						'address' => 'localhost',
 						'dbName' => 'rodent',
 						'username' => 'root',
-						'password' => '123',
+						'password' => 'stolker',
 						'persist' => false				
 					),
 		

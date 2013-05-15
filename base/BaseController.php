@@ -27,6 +27,7 @@ class BaseController {
 		foreach($variables as $key => $value){
 			$$key = $value;
 		}
+		
 		include_once(App::get()->rootDir . '/templates/' . $this->controller . '/' . $template . '.php');
 	}
 	

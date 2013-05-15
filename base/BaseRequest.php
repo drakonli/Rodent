@@ -44,11 +44,11 @@ class BaseRequest {
 		unset($_COOKIE[$name]);		
 	}
 	
-	public function redirect($url,$terminate=true,$statusCode=301)
-	{
+	public function redirect($url,$terminate=true,$statusCode=301,$delay = 0)
+	{			
 		if(strpos($url,'/')===0)
 			$url = $this->getHostInfo() . $url;
-		header('Location: '.$url, true, $statusCode);
+		header('Refresh: '.$delay .'; URL= '.$url, true, $statusCode);
 		if($terminate)
 			App::get()->endApp();
 	}
