@@ -97,6 +97,52 @@ protected $action = 'book'; // default action for this controller
 		$this->render($this->action, array('data' => $data));	
 	}
 	
+	public function userAction()
+	{	
+		$parameters = $this->parseRequestUser();
+		$modified   = false;
+	
+		if(!$parameters){
+			$this->sendError('Specify data that you need to update');
+			App::get()->endApp();
+		}	
+		
+		
+		$user = new UserModel();
+		$user->id  = $parameters['id'];
+				
+		$user = $user->findOne();		
+		
+		if(empty($user)){
+			$this->sendError('This username was not found');
+			App::get()->endApp();
+		}
+		
+		if(isset($parameters['username'])){
+			$modified     = true;
+			$user->username  = $parameters['username'];				
+		}
+		
+		if(isset($parameters['pswd'])){
+			$modified     = true;
+			$user->password = App::get()->generateHash($parameters['pswd']);
+		}
+		
+		if($modified)
+			$user->modified = time();		
+		
+		if(!$user->save()){
+			$this->sendError('Database error', $parameters['type']);
+			App::get()->endApp();
+		}
+		
+		$data = array ("message" => "Your profile has been updated successfully.
+				You'll be redirected to the main page in 5 seconds");
+	
+		$this->render($this->action, $data);		
+
+	}
+	
 	private function parseRequestBook(){
 		$type   = App::get()->request->getParam('type','json');
 		$id     = App::get()->request->getParam('id', null);
@@ -135,6 +181,20 @@ protected $action = 'book'; // default action for this controller
 		}
 	
 		$request = array('type' => $type, 'id' => $id, 'name' => $name );
+	
+		return $request;
+	}
+	
+	public function parseRequestUser() {
+		$id    	    = App::get()->request->getParam('id', null);
+		$username   = App::get()->request->getParam('username',"");
+		$password   = App::get()->request->getParam('pswd',"");
+	
+		if(!$id){
+			return false;
+		}
+	
+		$request = array('id' => $id, 'username' => $username, 'pswd' => $password);
 	
 		return $request;
 	}

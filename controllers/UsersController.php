@@ -2,8 +2,9 @@
 class UsersController extends Controller
 {
 	public function indexAction(){
-		if(App::get()->user->loggedIn){					
-			echo 'Hello, ' . App::get()->user->username;
+		if(App::get()->user->loggedIn){			
+			echo 'Hello, ' . App::get()->user->username . 
+				 '<br>Your id = ' . App::get()->user->id;
 			
 			 if(App::get()->user->isAdmin)
 				echo '<br>WHOA! You\'r ADMIN!';

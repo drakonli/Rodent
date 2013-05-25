@@ -6,7 +6,7 @@ abstract class BaseUser
 	protected $hashOptions = array();
 	protected $name;
 	protected $password;
-	protected $delimiter = "&";
+	protected $delimiter = "&";	
 	
 	public function __construct(){
 		$this->getStatus();
@@ -77,7 +77,7 @@ abstract class BaseUser
 				
 				if($this->generateUserHash() == $hash){
 					foreach($this->hashOptions as $key => $value)
-						$this->$key = $value;					
+						$this->$key = $value;
 					
 					$this->loggedIn = true;
 					$this->rememberMe = true;

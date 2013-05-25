@@ -6,17 +6,19 @@ class User extends BaseUser
 		
 		$user = new UserModel();	
 		$user->username = $this->name;
-		$user->password = App::get()->generateHash($this->password);
+		$user->password = App::get()->generateHash($this->password);		
 		
-		$thisUser = $user->findOne();	
-		
+		$thisUser = $user->findOne();			
 		
 		if(empty($thisUser)){
 			echo 'Username or password is invalid';
 			App::get()->endApp();
-		}		
+		}
+		
+		$this->setUserOption("id", $thisUser->id);		
+		//var_dump($this);die();
 		
 		return true;
 	}
-	
+
 }

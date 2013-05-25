@@ -58,6 +58,35 @@ class RemoveController extends Controller
 		$this->render($this->action, array('data' => $data));
 	}
 	
+	public function userAction(){
+		$parameters = $this->parseRequest();
+	
+		if(!$parameters){
+			$this->sendError('Wrong parameters!', $parameters['type']);
+			App::get()->endApp();
+		}
+	
+		$user = new UserModel();
+		$data = array();
+		if($parameters['id']){
+			foreach($parameters['id'] as $key => $id){
+				$user->id = $key;
+				$currentObject = $user->findOne();
+				if(!empty($currentObject)){
+					$data[$this->action][$key] = $currentObject->toArray();
+					if($currentObject->remove()){
+						$data[$this->action][$key]['removeSuccess'] = true;
+					}
+				}
+			}
+		}
+		
+		$data = array ("message" => "Your profile has been deleted successfully.
+				You'll be redirected to the main page in 5 seconds");
+	
+		$this->render($this->action, $data);		
+	}
+	
 	private function parseRequest(){
 		$type = App::get()->request->getParam('type', $this->types['default']);
 		$id   = App::get()->request->getParam('id');

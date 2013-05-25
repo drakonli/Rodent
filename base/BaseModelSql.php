@@ -47,7 +47,7 @@ abstract class BaseModelSql extends PDO
 			$data = $data->fetchAll();
 			$data = $this->dataToObject($data);
 			$data = isset($data[0]) ? $data[0] : null;
-		}
+		}		
 		return $data;
 	}
 	
@@ -86,9 +86,9 @@ abstract class BaseModelSql extends PDO
 		$this->beforeSave();
 		
 		$data = false;
-		if($this->recieved){
+		if($this->recieved){			
 			$result = $this->runQuery('update');
-		} else {
+		} else {			
 			$result = $this->runQuery('create');
 			$this->recieved = true;
 		}
@@ -324,7 +324,7 @@ abstract class BaseModelSql extends PDO
 				}
 			}
 			$objects[$key]->recieved = true;
-		}
+		}		
 		return $objects;		
 	}
 	

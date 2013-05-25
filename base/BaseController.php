@@ -25,9 +25,8 @@ class BaseController {
 	
 	protected function renderTemplate($template,$variables = array()){
 		foreach($variables as $key => $value){
-			$$key = $value;
-		}
-		
+			$$key = $value;			
+		}		
 		include_once(App::get()->rootDir . '/templates/' . $this->controller . '/' . $template . '.php');
 	}
 	

@@ -91,7 +91,7 @@ class NewController extends Controller
 	
 		$user = new UserModel();
 		$user->username = $parameters['username'];		
-		$thisUser = $user->find();			
+		$thisUser = $user->find();		
 	
 		if(!empty($thisUser)){			
 			$this->sendError('This username already exists');
@@ -104,6 +104,7 @@ class NewController extends Controller
 			$this->sendError('Database error', $parameters['type']);
 			App::get()->endApp();
 		}
+		
 		
 		$data = array ("message" => "Registration has been successful.
 		You'll be redirected to the main page in 5 seconds");

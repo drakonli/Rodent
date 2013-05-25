@@ -75,6 +75,39 @@ class GetController extends Controller
 		$this->render($this->action, array('data' => $data));
 	}
 	
+	public function userAction(){
+		$parameters = $this->parseRequest();
+	
+		if(!$parameters){
+			$this->sendError('Wrong parameters!');
+			App::get()->endApp();
+		}
+	
+		$user = new UserModel();
+		$data = array();
+	
+		if($parameters['id']){
+			foreach($parameters['id'] as $key => $id){
+				$user->id = $key;
+				$currentObject = $user->findOne();
+				if(!empty($currentObject)){
+					$data[$this->action][] = $currentObject->toArray();
+				}
+			}
+		}
+	
+		if(!$parameters['id']){
+			$objects = $user->findAll();
+			foreach($objects as $currentObject){
+				$data[$this->action][] = $currentObject->toArray();
+			}
+		}
+	
+		$data = $this->formatData($data, $parameters['type']);
+	
+		$this->render($this->action, array('data' => $data));
+	}
+	
 	private function parseRequest(){
 		$type = App::get()->request->getParam('type', $this->types['default']);
 		$id   = App::get()->request->getParam('id');
